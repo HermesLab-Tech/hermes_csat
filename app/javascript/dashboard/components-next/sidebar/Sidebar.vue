@@ -52,6 +52,11 @@ const store = useStore();
 const isCallsAvailable = computed(
   () => isOnChatwootCloud.value || isEnterprise
 );
+// O item "Chatbot" embute o builder do Typebot e só aparece quando a URL dele
+// está configurada (TYPEBOT_BUILDER_URL).
+const isChatbotAvailable = computed(() =>
+  Boolean(window.chatwootConfig?.typebotBuilderUrl)
+);
 const searchShortcut = useKbd([`$mod`, 'k']);
 const { t } = useI18n();
 
@@ -579,6 +584,17 @@ const menuItems = computed(() => {
             icon: 'i-lucide-phone',
             to: accountScopedRoute('calls_dashboard_index'),
             activeOn: ['calls_dashboard_index'],
+          },
+        ]
+      : []),
+    ...(isChatbotAvailable.value
+      ? [
+          {
+            name: 'Chatbot',
+            label: t('SIDEBAR.CHATBOT'),
+            icon: 'i-lucide-bot',
+            to: accountScopedRoute('chatbot_dashboard_index'),
+            activeOn: ['chatbot_dashboard_index'],
           },
         ]
       : []),
